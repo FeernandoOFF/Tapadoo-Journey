@@ -27,10 +27,24 @@
                 rotation: 0,
                 z: -9,
                 to: 1,
-                locationName: 'The bati-cave'
+                locationName: 'Boss room'
             }]
 
 
+        },
+        {
+            sceneImage: '#boss_room',
+            nextSceneIndicators:
+                [
+                    {
+                        x: 6.4,
+                        y: 1.4,
+                        rotation: -45,
+                        z: -9,
+                        to: 3,
+                        locationName: 'The bati-cave'
+                    },
+                ]
         },
         {
             sceneImage: '#office',
@@ -39,7 +53,7 @@
                     x: 0,
                     y: 0.2,
                     z: 10,
-                    to: 2,
+                    to: 1,
                     rotation: 180,
                     locationName: 'Boss room'
 
@@ -47,6 +61,22 @@
 
             ]
         },
+        {
+            sceneImage: '#main_entrance',
+            nextSceneIndicators:[
+                {
+                    x: 8.3,
+                    y: 1.2,
+                    z: -3.70,
+                    to: 2,
+                    rotation: -50,
+                    locationName: 'Boss room'
+
+                }
+            ]
+        },
+
+
     ]
 
     let currentSceneIndex = 0
@@ -76,6 +106,8 @@
         <img id="kitchen" src="/kitchen.jpg">
         <img id="office" src="/office.jpg">
         <img id="arrow" src="/arrow.png">
+        <img id="main_entrance" src="/main_entrance.jpg">
+        <img id="boss_room" src="/boss_room.jpg">
     </a-assets>
 
     <a-sky src="{currentScene.sceneImage}" rotation="0 -80 0"></a-sky>
@@ -96,15 +128,19 @@
         <a-entity
                 rotation="0 {navigation.rotation} 0"
                 position="{navigation.x} {navigation.y} {navigation.z}"
+                cursor-listener
+                on:click={()=>navigateToScene(navigation.to)}
         >
+
+            <a-plane
+                color="#CCC"
+                height="2.5" width="3"
+                position="0 0 -0.1">
+            </a-plane>
+
             <a-text
-                    on:mouseenter={()=>navigateToScene(navigation.to)}
-                    cursor-listener
-                    geometry="primitive: plane"
-                    width="10"
                     value="{navigation.locationName}"
                     position="0 -1 0"
-
             ></a-text>
 
             <a-image
