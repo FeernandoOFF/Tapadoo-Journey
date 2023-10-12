@@ -3,44 +3,62 @@
     import 'aframe-mouse-cursor-component'
     import {onMount} from "svelte";
     const scenes = [
-        {sceneImage: '#entrance',
-        nextSceneIndicator: {
-            x: 10,
-            y: 0.2,
-            z: -2,
-            to: '#kitchen'
-        }
+        {
+            sceneImage: '#entrance',
+            nextSceneIndicators: [
+                {
+                    x: 10,
+                    y: 0.4,
+                    z: -2,
+                    rotation: -95,
+                    to: 0,
+                    locationName: 'Kitchen'
+                }
+
+            ]
         },
-        {sceneImage: '#kitchen',
-            nextSceneIndicator: {
+        {
+            sceneImage: '#kitchen',
+            nextSceneIndicators:
+                [
+                    {
                 x: 4,
                 y: 0.2,
+                rotation: 0,
                 z: -9,
-                to: '#office'
-            }
-        },
-        {sceneImage: '#office',
-            nextSceneIndicator: {
-                x: 0,
-                y: 0.2,
-                z: 10,
-                to: '#entrance'
-            }
-        },
+                to: 1,
+                locationName: 'The bati-cave'
+            }]
 
 
+        },
+        {
+            sceneImage: '#office',
+            nextSceneIndicators:[
+                {
+                    x: 0,
+                    y: 0.2,
+                    z: 10,
+                    to: 2,
+                    rotation: 180,
+                    locationName: 'Boss room'
+
+                }
+
+            ]
+        },
     ]
 
     let currentSceneIndex = 0
     $: currentScene = scenes[currentSceneIndex]
     let navigating = false
-    function navigateToScene(){
+    function navigateToScene(index){
         if(navigating) return
         navigating = true
         setTimeout(()=>navigating = false,1000)
 
         if(currentSceneIndex >= scenes.length -1) {
-            currentSceneIndex = 0
+            currentSceneIndex = index
             return
         }
 
@@ -57,6 +75,7 @@
         <img id="entrance" src="/tapadoo.jpg">
         <img id="kitchen" src="/kitchen.jpg">
         <img id="office" src="/office.jpg">
+        <img id="arrow" src="/arrow.png">
     </a-assets>
 
     <a-sky src="{currentScene.sceneImage}" rotation="0 -80 0"></a-sky>
@@ -72,13 +91,29 @@
 
 <!--    Scene -->
 
-<a-entity
-            on:mouseenter={navigateToScene}
-            id="box"
-            cursor-listener
-            geometry="primitive: box"
-            position="{currentScene.nextSceneIndicator.x} {currentScene.nextSceneIndicator.y} {currentScene.nextSceneIndicator.z}"
-            material="color: blue"></a-entity>
+    {#each currentScene.nextSceneIndicators as navigation}
+
+        <a-entity
+                rotation="0 {navigation.rotation} 0"
+                position="{navigation.x} {navigation.y} {navigation.z}"
+        >
+            <a-text
+                    on:mouseenter={()=>navigateToScene(navigation.to)}
+                    cursor-listener
+                    geometry="primitive: plane"
+                    width="10"
+                    value="{navigation.locationName}"
+                    position="0 -1 0"
+
+            ></a-text>
+
+            <a-image
+                    src="#arrow"
+            ></a-image>
+
+        </a-entity>
+
+    {/each}
 
 <!--    <a-text font="kelsonsans" value='"A day at Work"' width="6" position="-2.5 0.25 -1.5" />-->
 <!--    <a-text value='Masterpiece done by Fernando Obregon' width="6" position="-2.5 0.25 -1.5"/>-->
