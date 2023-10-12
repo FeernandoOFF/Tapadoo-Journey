@@ -129,7 +129,7 @@
                 rotation="0 {navigation.rotation} 0"
                 position="{navigation.x} {navigation.y} {navigation.z}"
                 cursor-listener
-                on:click={()=>navigateToScene(navigation.to)}
+                on:mouseenter={()=>navigateToScene(navigation.to)}
         >
 
             <a-plane
